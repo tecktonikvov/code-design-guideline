@@ -5,7 +5,7 @@ Naming
 
 При именовании можно руководствоваться 
  - ENG [Swift API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/)
- - RU [Swift API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/)
+ - RU [Swift API Design Guidelines](https://github.com/tecktonikvov/code-design-guideline/blob/main/Swift%20API%20design%20guidelines.pdf)
 
 Несколько важных правил, которые стоит держать в голове:
 
