@@ -194,15 +194,14 @@ final class Example2 {
 
 ```swift
 private let jsonDecoder: JSONDecoder = {
-	let decoder = JSONDecoder()
-	decoder.dateDecodingStrategy = .secondsSince1970
-	decoder.allowsJSON5 = true
-	return decoder
+    let decoder = JSONDecoder()
+    decoder.dateDecodingStrategy = .secondsSince1970
+    decoder.allowsJSON5 = true
+    return decoder
 }()
 ```
 
 **Переваги:**
-
 1. Чистота коду: 
 	* Ініціалізація та налаштування об'єкта виконуються в одному місці.
 2. Зручність:
@@ -258,7 +257,6 @@ fileprivate struct Constants {
 ```
 
 # Логічне структурування коду
-
 Для покращення читабельності коду, рекомендується розділяти логічні кроки у методах чи функціях вертикальними відступами (порожніми рядками). Це допомагає швидше зрозуміти структуру коду, виділяючи окремі блоки виконання.
 
 ### **Правила використання вертикальних відступів:**
@@ -281,15 +279,15 @@ fileprivate struct Constants {
 let apiClient = APIClient()
 
 func fetchUserData() -> User? {
-	let request = UserRequest()
+    let request = UserRequest()
 
-	guard let response = apiClient.perform(request) else {
-		return nil
-	}
+    guard let response = apiClient.perform(request) else {
+        return nil
+    }
 
-	let user = User(data: response.data)
+    let user = User(data: response.data)
 
-	return user
+    return user
 }
 ```
 
@@ -309,7 +307,7 @@ func fetchUserData() -> User? {
 
 Дотримання цього правила допомагає швидше орієнтуватися в коді, виділяючи основні кроки виконання, та полегшує його підтримку і рев'ю.
 
-# Використовувати `return`, якщо метод складається з одного рядка, чи ні? (TBD)
+# Використання `return` (TBD)
 
 #### Рекомендації залежать від стилю команди та зручності читання коду. Розглянемо два підходи:
 
@@ -339,7 +337,6 @@ func square(of number: Int) -> Int {
 #### **Приклад:**
 
 ```swift
-Копировать код
 func square(of number: Int) -> Int {
     return number * number
 }
@@ -656,13 +653,13 @@ fileprivate final class ChildView: UIView {
 // Stateless клас 👍
 // Цей клас не зберігає жодного стану і працює лише з вхідними параметрами.
 fianl class Calculator {
-	func add(_ a: Int, _ b: Int) -> Int {
-		return a + b
-	}
+    func add(_ a: Int, _ b: Int) -> Int {
+        return a + b
+    }
 
-	func multiply(_ a: Int, _ b: Int) -> Int {
-		return a * b
-	}
+    func multiply(_ a: Int, _ b: Int) -> Int {
+        return a * b
+    }
 }
 ```
 > * Методи add та multiply працюють лише з вхідними параметрами.
@@ -673,21 +670,21 @@ fianl class Calculator {
 // Stateful клас 👎🏽
 // Цей клас зберігає внутрішній стан, який впливає на його поведінку.
 final class Calculator {
-	private var lastResult: Int = 0
+    private var lastResult: Int = 0
 
-	func add(_ a: Int, _ b: Int) -> Int {
-		lastResult = a + b
-		return lastResult
-	}
+    func add(_ a: Int, _ b: Int) -> Int {
+        lastResult = a + b
+        return lastResult
+    }
 
-	func multiply(_ a: Int, _ b: Int) -> Int {
-		lastResult = a * b
-		return lastResult
-	}
+    func multiply(_ a: Int, _ b: Int) -> Int {
+        lastResult = a * b
+        return lastResult
+    }
 
-	func getLastResult() -> Int {
-		return lastResult
-	}
+    func getLastResult() -> Int {
+        return lastResult
+    }
 }
 ```
 
