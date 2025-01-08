@@ -55,7 +55,7 @@ import SomeModule
 let service: SomeModule.Service
 ```
 
-# Оголошення об'єктів
+# Декларування об'єктів
 
 При оголошенні об'єктів (класи, протоколи) між назвою та початком блоку не робиться перенесення рядка:
 
@@ -65,17 +65,7 @@ final class Formatter {
 }
 ```
 
-# Final
-Модифікатор final **обов'язково** використовується для об'єктів, які не планується успадковувати (переважна більшість об'єктів).
-
-Для методів, властивостей і сабскриптів, помічених як **final**, компілятор може уникнути використання динамічної диспетчеризації (dynamic dispatch) через таблицю віртуальних функцій (VTable). Натомість використовується статична диспетчеризація, що дозволяє зекономити пам'ять і прискорити доступ.
-
-```swift
-final class Service {
-}
-```
-
-# Порядок оголошення властивостей
+# Декларування властивостей
 
 1. **Властивості згруповані:**
 	1. Статичні властивості
@@ -95,15 +85,15 @@ final class Service {
 - Властивості всередині кожної групи не повинні бути розділені вертикальними відступами.
   Вийняком становлять обчислювальні властивості. Ці властивості завжди розділяються вертикальним відступом.
  
-```swift
-    var someInt: Int {
-        // Some logic
-    }
+   		```swift
+		var someInt: Int {
+			// Some logic
+		}
 	
-    var someBool: Bool {
-        // Some logic
-    }
-```
+		var someBool: Bool {
+			// Some logic
+		}
+		```
 
 ### Приклад
 
@@ -149,7 +139,6 @@ final class Example {
    open openSecondVariable: String
 }
 ```
-
 
 # Readonly
 Якщо властивість об'єкта повинна бути доступна лише для читання, використовується модифікатор **private(set)**
@@ -199,11 +188,11 @@ final class Example {
 }
 ```
 
-# Оголошення та налаштування вкладених об'єктів
+# Декларування та налаштування вкладених об'єктів
 Поширеною практикою є **"лінива ініціалізація з використанням замикання" (lazy initialization using a closure)**.
-Оголошення об'єкта та його початкові налаштування відбуваються у одному місці у середині кложури.
+Декларування об'єкта та його початкові налаштування відбуваються у одному місці у середині кложури.
 
-### Приклад:
+**Приклад:**
 
 ```swift
 final class ParentObject {
@@ -217,6 +206,7 @@ final class ParentObject {
 ```
 
 **Переваги:**
+
 1. Чистота коду: 
 	* Ініціалізація та налаштування об'єкта виконуються в одному місці.
 2. Зручність:
@@ -224,7 +214,7 @@ final class ParentObject {
 3. Зрозумілість: 
 	* Якщо налаштування об'єкта складне, воно структуроване та ізольоване.
 
-### Якщо налаштування об'єкта не можливе у місці його оголошення
+### Якщо налаштування об'єкта не можливе у місці його декларування
 Якщо налаштування залежать від інших данних які недоступні на даннному єтапі - використовуеться підхід коли необхідні данні виносяться у статичні константи окремої, обмеженої файловою зоною видимості структури, та встановлюются тоді коли це необхідно.
 
 ```swift
@@ -263,7 +253,7 @@ final class SomeViewController: UIViewController {
 }
 
 // MARK: - Constants
-fileprivate struct Constants {
+private struct Constants {
     static let titleLabelFont = UIFont.someTitleLabel()
     static let subtitleLabelFont = UIFont.someSubtitleLabel()
     static let subtitleLabelRegularColor = UIColor.regular()
@@ -358,9 +348,250 @@ func square(of number: Int) -> Int {
 ```
 
 # Загальна структура файлу
+Чітка структура файлу сприяє легшому розумінню, навігації та підтримці коду. У файлах рекомендується дотримуватися певного порядку розміщення елементів, щоб забезпечити єдиний підхід до організації коду в команді.
 
 
-# Використання `// MARK:` у Swift
+### **Рекомендований порядок:**
+1. **Імпорти:**
+   - Імпорти розташовані за кількістю символів, а потім алфавітом
+
+   ```swift
+    import UIKit
+    import Alamofire
+    import Foundation
+    import MyApplicationCore
+	```
+	
+	або (TBD)
+	
+	- Спочатку імпортуються стандартні бібліотеки.
+   - Потім імпортуються сторонні фреймворки та модулі.
+   - Завершується імпорт внутрішніх модулів проєкту.
+   - Між групами імпортів використовуйте порожній рядок.
+
+   ```swift
+    import UIKit
+    import Foundation
+
+    import Alamofire
+
+    import MyAppCore
+   ```
+   
+2. **Декларування класу/структури/протоколу:**
+	- Назва класу або іншої сутності одразу йде після імпортів.
+	- За потреби додається документація.
+
+3. **Властивості:**
+	- Розміщуються на початку класу для легкого доступу та читабельності.
+	- Більш детально описано у главі **"Декларування властивостей"**
+	
+4. **Ініціалізатори:**
+	- `init` розміщується одразу після констант та статичних властивостей.
+	- Ініціалізатори мають бути компактними та зрозумілими.
+
+5. **Методи:**
+	- Методи життевого циклу розміщується одразу після констант ініціалізаторів.
+	- Інші методи поділяются на групи за модифікатором доступу (публічні, внутрішні, приватні). В середині групи за типом (геттери, сеттери, мережеві запити, фабричні методи, службові)
+	- Оскільки більшу кількість часу ми працюємо з приватними методами їх слід розташовувати першими, одразу після методів життевого циклу, ближче до властивостей.
+	- Наступними слід розташовувати публічні методи. Далі статичні методи. Останніми @objc методи.
+6. **Розширення (Extensions):**
+	- Якщо файл містить кілька розширень для класу/структури, вони розташовуються в кінці файлу.
+	- Спочатку слід розташовувати розширення із стандартної бібліотеки apple: UITableViewDelegate, UITextFieldDelegate, e.t.c.
+	- Наступними слід розташовувати кастомні розширення: UserManagerDelegate, e.t.c.
+	- Останніми розширення базових класів.
+
+7. **Службові типи:**
+	- Невеликі пов'язані допоміжні типи можуть бути визначені в одному файлі. Це може бути корисно при використанні fileprivate для обмеження певної функціональності типу та/або його допоміжними типами тільки в цьому файлі.
+	- Місце декларації службових типів слід вибирати самостійно, з урахуванням зручності їх використання та читабельності коду. 
+
+### Приклад:
+
+```swift
+import UIKit
+import MyApplicationCore
+
+protocol ExampleOfProtocol {
+    func doSomething()
+}
+
+struct ExampleViewControllerDataModel {
+    let isWarning: Bool
+    let title: String
+    let description: String
+}
+
+/// View controller that shows an example of code style usage
+final class ExampleViewController: UIViewController {
+    static let subtitleLabelFontSize: CGFloat = 24.0
+
+    @IBOutlet private weak var titleLabel: UILabel!
+    
+    // MARK: - Properties
+    private let subtitleLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: subtitleLabelFontSize)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var mainButton: UIButton = {
+        let button = UIButton()
+        button.layer.cornerRadius = 12
+        button.backgroundColor = .systemBlue
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(onMainButtonTap), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var textField: UITextField = {
+        let textField = UITextField()
+        textField.borderStyle = .roundedRect
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.delegate = self
+        return textField
+    }()
+    
+    private let descriptionView: DescriptionView = {
+        let _descriptionView = DescriptionView()
+        _descriptionView.layer?.cornerRadius = 12
+        _descriptionView.layer?.cornerCurve = .continuous
+        _descriptionView.translatesAutoresizingMaskIntoConstraints = false
+        return _descriptionView
+    }()
+    
+    // MARK: - Init
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        setup()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Lifecycle
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        runApperanceAnimation()
+    }
+
+    // MARK: - Private
+    private func setup() {
+        view.backgroundColor = .white
+        
+        setupTitleLabel()
+        setupSubtitleLabel()
+        setupDescriptionView()
+        setupTextField()
+        setupMainButton()
+    }
+    
+    private func setupTitleLabel() {
+        titleLabel.font = Constants.titleFont
+        titleLabel.numberOfLines = 0
+        
+        view.addSubview(titleLabel)
+        NSLayoutConstraint.activate([
+            // ...
+        ])
+    }
+
+    private func setupSubtitleLabel() {
+        view.addSubview(subtitleLabel)
+        NSLayoutConstraint.activate([
+            // ...
+        ])
+    }
+    
+    private func setupDescriptionView() {
+        view.addSubview(descriptionView)
+        NSLayoutConstraint.activate([
+            // ...
+        ])
+    }
+    
+    private func setupTextField() {
+        view.addSubview(textField)
+        NSLayoutConstraint.activate([
+            // ...
+        ])
+    }
+    
+    private func setupMainButton() {
+        view.addSubview(mainButton)
+        NSLayoutConstraint.activate([
+            // ...
+        ])
+    }
+    
+    private func runApperanceAnimation() {
+        // ...
+    }
+    
+    @objc private func onMainButtonTap() {
+        // ...
+    }
+    
+    // MARK: - Public
+    func uppercasedInput() -> String? {
+        textField.uppercasedInput()
+    }
+    
+    func configure(wit model: ExampleViewControllerDataModel) {
+        titleLabel.text = model.title
+        
+        subtitleLabel.textColor = model.isWarning
+        ? Constants.subtitleLabelWarningTextColor
+        : Constants.subtitleLabelRegularTextColor
+        
+        mainButton.setTitle(model.isWarning ? "Back" : "Continue", for: .normal)
+        descriptionView.setTitle(model.description)
+    }
+}
+
+// MARK: - Constants
+private enum Constants {
+    static let titleFont: UIFont = .boldSystemFont(ofSize: 24)
+    static let subtitleLabelFontSize: CFloat = 24.0
+    static let subtitleLabelWarningTextColor: UIColor = .red
+    static let subtitleLabelRegularTextColor: UIColor = .black
+}
+
+// MARK: - UITextFieldDelegate
+extension ExampleViewController: UITextFieldDelegate {
+    func textFieldDidEndEditing() {
+        // ...
+    }
+}
+
+// MARK: - ExampleOfProtocol
+extension ExampleViewController: ExampleOfProtocol {
+    func doSomething() {
+        // ...
+    }
+}
+
+// MARK: - UITextField + Extension
+private extension UITextField {
+    func uppercasedInput() -> String? {
+        text?.uppercased()
+    }
+}
+
+// MARK: - DescriptionView
+private class DescriptionView: UIView {
+    // ...
+    
+    func setTitle(_ text: String) {
+        // ...
+    }
+}
+```
+    
+# Використання `// MARK:`
 
 **// MARK:** — це потужний інструмент для структурування та навігації по коду, особливо у великих класах, структурах чи файлах. Його правильне використання допомагає покращити читабельність, полегшує розуміння коду та прискорює роботу з ним.
 
@@ -493,9 +724,7 @@ func createViewIfNeeded() {
 }
 ```
 
-
-
-# Рекомендації щодо використання if-else
+# Використання if-else
 
 Правильне використання конструкцій **if-else** у Swift допоможе зробити код більш читабельним, підтримуваним та зрозумілим.
 
@@ -515,7 +744,7 @@ func createViewIfNeeded() {
 4. **Завжди використовуйте фігурні дужки**:
    - Навіть якщо у блоці всього один рядок, додавайте фігурні дужки `{}`. Це знижує ризик помилок під час додавання нових рядків.
 
-## Найкращі практики
+## Практика
 
 ### **1. Використовуйте `guard` для раннього виходу**
 
@@ -609,6 +838,47 @@ if isEligible {
 * Використовуйте guard для раннього виходу, щоб уникнути вкладеності.
 * Дотримуйтесь узгодженого стилю та пишіть код, який буде легко зрозуміти та підтримувати вашій команді.
 
+# Використання множення замість ділення
+Для покращення продуктивності коду, слід використовувати операцію множення замість ділення там, де це можливо. Ділення є у 6 разів більш затратною з точки зору обчислювальних ресурсів операцією, ніж множення.
+
+❌ Неправильно:
+
+```swift
+let halfValue = value / 2
+let oneThird = value / 3
+```
+✅ Правильно:
+
+```swift
+let halfValue = value * 0.5
+let oneThird = value * (1.0 / 3.0)
+```
+
+# Неявне виведення типів
+У Swift слід уникати явного зазначення типу змінної, якщо його можна вивести автоматично. Swift має потужну систему виведення типів, яка дозволяє зробити код більш чистим і лаконічним.
+
+* Код стає легшим для читання та менш перевантаженим зайвою інформацією.
+* Swift компілює код з використанням виведення типів без втрат у продуктивності.
+* Використовуйте явне зазначення типів лише тоді, коли це необхідно для уникнення неоднозначності або забезпечення правильності логіки.
+
+❌ Неправильно:
+
+```swift
+let userName: String = "John Doe"
+let numbers: [Int] = [1, 2, 3, 4, 5]
+let isValid: Bool = true
+```
+✅ Правильно:
+
+```swift
+let userName = "John Doe"
+let numbers = [1, 2, 3, 4, 5]
+let isValid = true
+```
+
+# Використання .init
+У Swift рекомендується уникати використання скорочення .init, якщо можливо, і замість цього використовувати повну назву ініціалізатора. Це робить код більш читабельним і спрощує пошук по проекту.
+
 # Public, Open, Internal
 У межах основного таргета модифікатори **open, public, internal** не використовуються (виняток становлять окремі бібліотеки).
 
@@ -635,6 +905,16 @@ fileprivate final class ChildView: UIView {
    - Зміни у налаштуваннях можна легко відстежувати за допомогою системи контролю версій (наприклад, Git).
    - Менше ризику випадково змінити властивості у Storyboard/XIB.
    - Усі зміни стилю і поведінки зберігаються у коді, що зменшує ризик конфліктів з налаштуваннями в Storyboard/XIB.
+
+# Final
+Модифікатор final **обов'язково** використовується для об'єктів, які не планується успадковувати (переважна більшість об'єктів).
+
+Для методів, властивостей і сабскриптів, помічених як **final**, компілятор може уникнути використання динамічної диспетчеризації (dynamic dispatch) через таблицю віртуальних функцій (VTable). Натомість використовується статична диспетчеризація, що дозволяє зекономити пам'ять і прискорити доступ.
+
+```swift
+final class Service {
+}
+```
 
 # Stateless
 **Stateless** (безстанний) код — це код, який не зберігає внутрішній стан між викликами функцій або методів. Він працює лише з введеними даними, повертаючи результат без залежності від зовнішнього контексту або змінюваного стану.
