@@ -77,49 +77,59 @@ final class Service {
 
 # Порядок оголошення властивостей
 
-1. **Властивості мають розташовуватися у наступному порядку:**
-	1. 	Спочатку IBOutlets
-	1. 	Далі за строгістю зони видимості
-	1. 	Потім за кількістю символів (від коротшого до довшого).
-	1. 	За алфавітом (за зростанням).
+1. **Властивості згруповані:**
+	1. Статичні властивості
+	1. Cпеціальні модифікатори, які починаються з @ (@IBOutlet, @objc, e.t.c)
+	1. Не статичні властивості
 
-2. **Розділення за модифікаторами:**
-   - Властивості з різними модифікаторами (private, public, lazy, private(set), @IBOutlet, та інша )) повинні бути розташовані одна за одним там розділені вертикальними відступами.
-     
-     **Вийняком становлять обчислювальні властивості**
- 
-   		```swift
-		var someInt: Int {
-			// Some logic
-		}
-	
-		var someBool: Bool {
-			// Some logic
-		}
-		```
+1. **Усередині кожної групи властивості сортуються:**
+	1. За строгістю зони видимості (від private до open).
+	1. За кількістю символів (від коротшого до довшого).
+	1. За алфавітом (за зростанням).
+
+2. **Групи:**
+   - Групи повинні бути розділені вертикальними відступами.
     
-   - Властивості всередині кожного блоку повинні слідувати правилу кількості символів та алфавітного порядку.
+    
+- Властивості всередині кожної групи повинні слідувати правилу кількості символів та алфавітного порядку.
+- Властивості всередині кожної групи не повинні бути розділені вертикальними відступами.
+  Вийняком становлять обчислювальні властивості. Ці властивості завжди розділяються вертикальним відступом.
+ 
+```swift
+    var someInt: Int {
+        // Some logic
+    }
+	
+    var someBool: Bool {
+        // Some logic
+    }
+```
 
 ### Приклад
 
 ```swift
 final class Example {
+   private static let someStaticPrivateConstant: CGFloat = 16.0
+   
+   static let shared = Example()
+   static let someStaticConstant: CGFloat = 16.0
+   
    @IBOutlet weak private var titleLabel: UILabel!
-   @IBOutlet weak private var containerView: UIView!
    @IBOutlet weak private var backButton: UIButton!
-	
+   @IBOutlet weak private var containerView: UIView!
+
    private let lessSymbolsProperty: Int
    private let aLittleBitMoreSymbolsProperty: String
    private let theMostLongerSymbolsProperty: SomeCustomType1
-	
+   	
    private(set) var firstPrivateSetVar: Int
    private(set) var secondPrivateSetVar: Int
-    
-   public lazy var firstLazyVar: Bool
-   public lazy var secondLazyVar: String
 	
    var firstBool: Bool
    var secondBool: String
+	
+   public lazy var firstLazyVar: Bool
+   public lazy var secondLazyVar: String
 	
    weak var firstWeakVariable: SomeCustomType2?
    weak var secondWeakVariable: SomeCustomType3?
@@ -139,6 +149,7 @@ final class Example {
    open openSecondVariable: String
 }
 ```
+
 
 # Readonly
 Якщо властивість об'єкта повинна бути доступна лише для читання, використовується модифікатор **private(set)**
