@@ -85,19 +85,20 @@ final class Service {
 
 2. **Розділення за модифікаторами:**
    - Властивості з різними модифікаторами (private, public, lazy, private(set), @IBOutlet, та інша )) повинні бути розташовані одна за одним там розділені вертикальними відступами.
-   - Властивості всередині кожного блоку повинні слідувати правилу кількості символів та алфавітного порядку.
-
-> **Вийняком становлять обчислювальні властивості**
-   
-   ```swift
-var someInt: Int {
-	// Some logic
-}
+     
+     **Вийняком становлять обчислювальні властивості**
+ 
+   		```swift
+		var someInt: Int {
+			// Some logic
+		}
 	
-var someBool: Bool {
-	// Some logic
-}
-   ```
+		var someBool: Bool {
+			// Some logic
+		}
+		```
+    
+   - Властивості всередині кожного блоку повинні слідувати правилу кількості символів та алфавітного порядку.
 
 ### Приклад
 
@@ -107,9 +108,9 @@ final class Example {
    @IBOutlet weak private var containerView: UIView!
    @IBOutlet weak private var backButton: UIButton!
 	
-   private let lessSymbolsLineProperty: Int
-   private let aLittleBitMoreSymbolsLineProperty: String
-   private let theMostLongerSymbolsLineProperty: SomeCustomType1
+   private let lessSymbolsProperty: Int
+   private let aLittleBitMoreSymbolsProperty: String
+   private let theMostLongerSymbolsProperty: SomeCustomType1
 	
    private(set) var firstPrivateSetVar: Int
    private(set) var secondPrivateSetVar: Int
@@ -164,7 +165,7 @@ final class Request {
 Модифікатори області видимості всередині класів мають пріоритет у написанні (розташовуються першими):
 
 ```swift
-final class Example1 {
+final class Example {
     private let constant = 10.0
     private(set) var isReadonly = true
     fileprivate final lazy var alwaysTrue = true
@@ -178,7 +179,7 @@ final class Example1 {
 Винятком є спеціальні модифікатори, які починаються з @:
 
 ```swift
-final class Example2 {
+final class Example {
     @objc let constant = 10.0
     @IBOutlet private(set) var titleLabel: UILabel!
     @IBAction private func cancelButtonClicked(sender: UIButton) {
@@ -187,18 +188,21 @@ final class Example2 {
 }
 ```
 
-# Оголошення та налаштування об'єкта
-Поширеною практикою ініціалізації обʼекта є **"лінива ініціалізація з використанням замикання" (lazy initialization using a closure)**.
+# Оголошення та налаштування вкладених об'єктів
+Поширеною практикою є **"лінива ініціалізація з використанням замикання" (lazy initialization using a closure)**.
+Оголошення об'єкта та його початкові налаштування відбуваются у одному місці у середині кложури.
 
 ### Приклад:
 
 ```swift
-private let jsonDecoder: JSONDecoder = {
-    let decoder = JSONDecoder()
-    decoder.dateDecodingStrategy = .secondsSince1970
-    decoder.allowsJSON5 = true
-    return decoder
-}()
+final class ParentObject {
+    private let jsonDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.allowsJSON5 = true
+        decoder.dateDecodingStrategy = .secondsSince1970
+        return decoder
+    }()
+}
 ```
 
 **Переваги:**
@@ -210,7 +214,7 @@ private let jsonDecoder: JSONDecoder = {
 	* Якщо налаштування об'єкта складне, воно структуроване та ізольоване.
 
 ### Альтернатива
-Якщо налаштування обьекта не можливе у місці його оголошення використовуеться підхід коли необхідні данні виносяться у статичні константи окремої, обмеженої файловою зоною видимості структури, та встановлюются тоді коли це необхідно.
+Якщо налаштування об'єкта не можливе у місці його оголошення (налаштування залежать від інших данних які недоступні на даннному єтапі) - використовуеться підхід коли необхідні данні виносяться у статичні константи окремої, обмеженої файловою зоною видимості структури, та встановлюются тоді коли це необхідно.
 
 ```swift
 final class SomeViewController: UIViewController {
