@@ -85,15 +85,15 @@ final class Formatter {
 - Властивості всередині кожної групи не повинні бути розділені вертикальними відступами.
   Вийняком становлять обчислювальні властивості. Ці властивості завжди розділяються вертикальним відступом.
  
-   		```swift
-		var someInt: Int {
-			// Some logic
-		}
+ ```swift
+var someInt: Int {
+    // Some logic
+}
 	
-		var someBool: Bool {
-			// Some logic
-		}
-		```
+var someBool: Bool {
+    // Some logic
+}
+```
 
 ### Приклад
 
