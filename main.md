@@ -926,7 +926,8 @@ final class Service {
 > feature/IOS-6035-add-profile-screen
 
 - Для загальних змін (які не стосуються конкретної задачі) використовуйте описову назву:
-> feature/update_readme refactor_network_layer
+> feature/update-readme
+> feature/refactor-network-layer
 
 ### 2. Коміти
 - Коміти повинні бути змістовними та чіткими.
