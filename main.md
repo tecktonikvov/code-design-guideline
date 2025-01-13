@@ -132,11 +132,11 @@ final class Example {
       // Some logic
    }
 	
-   public publicFirstVariable: String
-   public publicsecondVariable: String
+   public firstPublicVariable: String
+   public secondPublicVariable: String
 	
-   open openFirstVariable: String
-   open openSecondVariable: String
+   open firstOpenVariable: String
+   open secondOpenVariable: String
 }
 ```
 
