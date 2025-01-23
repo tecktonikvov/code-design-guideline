@@ -73,23 +73,21 @@ final class Formatter {
 	1. Не статичні властивості
 
 1. **Усередині кожної групи властивості сортуються:**
-	1. За строгістю зони видимості (від private до open).
-	1. За кількістю символів (від коротшого до довшого).
-	1. За алфавітом (за зростанням).
+	1. За зоною видимості (від open до private).
 
 2. **Групи:**
    - Групи повинні бути розділені вертикальними відступами.
     
     
-- Властивості всередині кожної групи повинні слідувати правилу кількості символів та алфавітного порядку.
 - Властивості всередині кожної групи не повинні бути розділені вертикальними відступами.
   Вийняком становлять обчислювальні властивості. Ці властивості завжди розділяються вертикальним відступом.
+  
  
  ```swift
 var someInt: Int {
     // Some logic
 }
-	
+
 var someBool: Bool {
     // Some logic
 }
@@ -99,31 +97,31 @@ var someBool: Bool {
 
 ```swift
 final class Example {
-   private static let someStaticPrivateConstant: CGFloat = 16.0
+   public static let shared = Example()
    
-   static let shared = Example()
    static let someStaticConstant: CGFloat = 16.0
+   
+   private static let someStaticPrivateConstant: CGFloat = 16.0
    
    @IBOutlet weak private var titleLabel: UILabel!
    @IBOutlet weak private var backButton: UIButton!
    @IBOutlet weak private var containerView: UIView!
-
-   private let lessSymbolsProperty: Int
-   private let aLittleBitMoreSymbolsProperty: String
-   private let theMostLongerSymbolsProperty: SomeCustomType1
    	
-   private(set) var firstPrivateSetVar: Int
-   private(set) var secondPrivateSetVar: Int
-	
-   var firstBool: Bool
-   var secondBool: String
-	
+   open firstOpenVariable: String
+   open secondOpenVariable: String
+   	
+   public firstPublicVariable: String
+   public secondPublicVariable: String
+   	
    public lazy var firstLazyVar: Bool
    public lazy var secondLazyVar: String
-	
+   	
+   var firstBool: Bool
+   var secondBool: String
+   
    weak var firstWeakVariable: SomeCustomType2?
    weak var secondWeakVariable: SomeCustomType3?
-	
+   
    var firstComputedVariable: Int {
       // Some logic
    }
@@ -131,12 +129,13 @@ final class Example {
    var secondComputedVariable: Int {
       // Some logic
    }
-	
-   public firstPublicVariable: String
-   public secondPublicVariable: String
-	
-   open firstOpenVariable: String
-   open secondOpenVariable: String
+
+   private let lessSymbolsProperty: Int
+   private let aLittleBitMoreSymbolsProperty: String
+   private let theMostLongerSymbolsProperty: SomeCustomType1
+   	
+   private(set) var firstPrivateSetVar: Int
+   private(set) var secondPrivateSetVar: Int
 }
 ```
 
@@ -190,34 +189,36 @@ final class Example {
 
 # Винесення до Constants
 
-До Constants виносятся:
+### До Constants виносятся:
 
-1. **Значення відступів, розмірів, шрифтів тощо**
+- Значення відступів, розмірів, шрифтів, тощо
 
-2. **Ідентифікатори та ключі**, які використовуються для доступу до елементів інтерфейсу або конфігурацій:
-   - Назви кнопок, ярликів, ключів для `UserDefaults` тощо.
+- Ідентифікатори та ключі, які використовуються для доступу до елементів інтерфейсу або конфігурацій:
+- Назви кнопок, ярликів, ключів для `UserDefaults` тощо.
 
-3. **Повторювані значення**, які використовуються у кількох місцях:
-   - Наприклад, константи для кольорів, шрифтів, значень відступів і розмірів.
+- Повторювані значення, які використовуються у кількох місцях:
+- Наприклад, константи для кольорів, шрифтів, значень відступів і розмірів.
 
-#### Що не виноситься у Constants:
-- **Глобальні значення, які не повторюються у коді.** 
-  - Наприклад, якщо певне значення використовується лише один раз у межах методу або класу, його немає сенсу додавати до **Constants**.
-- **Значення, які є локальними для невеликих функцій або методів.** 
-  - Такі константи можна оголошувати локально в межах функції для збереження контексту.
-- **Int значення 0 і 1** 
-- **Bool значення** 
+## Що не виноситься у Constants:
+- Глобальні значення, які не повторюються у коді. 
+	> Наприклад, якщо певне значення використовується лише один раз у межах методу або класу, та не відносится до значень із попереднього пункту, його немає сенсу додавати до **Constants**.
 
-#### Виняток:
+- Значення, які є локальними для невеликих функцій або методів.
+	> Такі константи можна оголошувати локально в межах функції для збереження контексту.
+
+- Int значення 0 і 1
+- Bool значення
+
+### Виняток:
 - Якщо глобальне значення використовується кілька разів навіть у межах одного класу, його варто винести у **Constants**, щоб уникнути дублювання.
 
-#### Переваги використання Constants:
+## Переваги використання Constants:
 - **Зручність підтримки:** Усі налаштування зосереджені в одному місці.
 - **Прозорість:** Легше зрозуміти, як налаштовуються об'єкти.
 - **Гнучкість:** Швидко змінювати значення в одному місці без необхідності проходити весь код.
 - **Уникнення дублювання:** Один раз визначене значення використовується в кількох місцях.
 
-#### Приклад використання:
+## Приклад використання:
 
 ```swift
 final class SomeViewController: UIViewController {
@@ -238,20 +239,21 @@ final class SomeViewController: UIViewController {
     }
 }
 
-// MARK: - Constants
-private enum Constants {
-    static let cornerRadius: CGFloat = 16.0
-    static let spacing: CGFloat = 20.0
-    static let buttonHeight: CGFloat = 58.0
-    static let separatorHeight: CGFloat = 2.0
-    static let closeButtonIdentifier = "btn_white_close"
+private extension SomeViewController {
+    private enum Constants {
+        static let cornerRadius: CGFloat = 16.0
+        static let spacing: CGFloat = 20.0
+        static let buttonHeight: CGFloat = 58.0
+        static let separatorHeight: CGFloat = 2.0
+        static let closeButtonIdentifier = "btn_white_close"
+    }
 }
 ```
 
 ### Рекомендація:
-- Використовуйте private enum Constants із файловою зоною видимості.
+- Використовуйте private enum Constants в екстеншені об'єкта власника, із приватною зоною видимості.
 - Розташовуйте секцію Constants в кінці файлу для підтримки структурованості.
-- Константи мають бути статичними (static) для уникнення зайвих екземплярів.
+- Константи мають бути статичними (static).
 - Не додавайте в Constants значення, які використовуються лише один раз, за винятком випадків, коли це покращує читабельність або дозволяє уникнути дублювання.
 
 
@@ -281,60 +283,6 @@ final class ParentObject {
 3. Зрозумілість: 
 	* Якщо налаштування об'єкта складне, воно структуроване та ізольоване.
 
-# Логічне структурування коду (TBD)
-Для покращення читабельності коду, рекомендується розділяти логічні кроки у методах чи функціях вертикальними відступами (порожніми рядками). Це допомагає швидше зрозуміти структуру коду, виділяючи окремі блоки виконання.
-
-**TBD: Тут думки розділяются 
-Перший варіант це те як описано, другий це не робити відступи в скоупах методів взагалі що б виділяти методи візуально було легше, або робити 1 відступ у ускоупі методів та 2 перед оголошенням методів.**
-
-### **Правила використання вертикальних відступів:**
-1. **Виділення логічних блоків:**
-   - Розділяйте код на зрозумілі секції, наприклад:
-     - Ініціалізація змінних.
-     - Виклик методів.
-     - Обробка результатів.
-     - Повернення значень.
-
-2. **Не залишайте надмірну кількість порожніх рядків:**
-   - Використовуйте **один** порожній рядок між логічними блоками, щоб уникнути "розриву" структури.
-
-3. **Не залишайте порожні рядки перед закриваючими дужками `}`:**
-   - Це порушує загальний стиль та виглядає як помилка.
-
-### **✅ Приклад правильного оформлення:**
-
-```swift
-let apiClient = APIClient()
-
-func fetchUserData() -> User? {
-    let request = UserRequest()
-
-    guard let response = apiClient.perform(request) else {
-        return nil
-    }
-
-    let user = User(data: response.data)
-
-    return user
-}
-```
-
-### **❌ Приклад неправильного оформлення:**
-
-```swift
-func fetchUserData() -> User? {
-    let apiClient = APIClient()
-    let request = UserRequest()
-    guard let response = apiClient.perform(request) else {
-        return nil
-    }
-    let user = User(data: response.data)
-    return user
-}
-```
-
-Дотримання цього правила допомагає швидше орієнтуватися в коді, виділяючи основні кроки виконання, та полегшує його підтримку і рев'ю.
-
 # Використання `return`
 Хоча swift і дозволяе не писати return щось повертается зі скоупу та вираз займае 1 рядок, треба явно повертати якісь занчення використовуючи return.
 Цей підхід забезпечує однорідність коду, оскільки всі методи використовують явне повернення.
@@ -351,36 +299,21 @@ func square(of number: Int) -> Int {
 Чітка структура файлу сприяє легшому розумінню, навігації та підтримці коду. У файлах рекомендується дотримуватися певного порядку розміщення елементів, щоб забезпечити єдиний підхід до організації коду в команді.
 
 
-### **Рекомендований порядок:**
+## **1. Рекомендований порядок:**
 1. **Імпорти:**
-   - Імпорти розташовані за кількістю символів, а потім алфавітом
+   - Імпорти розташовані один за одним
 
    ```swift
     import UIKit
     import Alamofire
     import Foundation
     import MyApplicationCore
-	```
-	
-	або (TBD)
-	
-   - Спочатку імпортуються стандартні бібліотеки.
-   - Потім імпортуються сторонні фреймворки та модулі.
-   - Завершується імпорт внутрішніх модулів проєкту.
-   - Між групами імпортів використовуйте порожній рядок.
-
-   ```swift
-    import UIKit
-    import Foundation
-
-    import Alamofire
-
-    import MyAppCore
    ```
    
 2. **Декларування класу/структури/протоколу:**
-	- Назва класу або іншої сутності одразу йде після імпортів.
+	- Назва класу або іншої сутності через 1 рядок після імпортів.
 	- За потреби додається документація.
+	- Між назвою об`єкта на документаціею немае відступу.
 
 3. **Властивості:**
 	- Розміщуються на початку класу для легкого доступу та читабельності.
@@ -391,13 +324,20 @@ func square(of number: Int) -> Int {
 	- Ініціалізатори мають бути компактними та зрозумілими.
 
 5. **Методи:**
-	- Методи життевого циклу розміщується одразу після констант ініціалізаторів.
-	- Інші методи поділяются на групи за модифікатором доступу (публічні, внутрішні, приватні). В середині групи за типом (геттери, сеттери, мережеві запити, фабричні методи, службові)
-	- Одразу після методів життевого цикл розташовуются статичні методи, потім усі інші.
-
-	**TBD: Чи треба розташовувати статичні методи разом із статичними змінними у початку класу/стурктури?**
-	- Усі методи відсортовані за модифікатором доступу (від open до private).
-	- @objc методи у кінці.
+	1. Методи життевого циклу розміщується одразу після ініціалізаторів.
+	2. Інші методи поділяются на групи 3 групи: static, public, private.
+		- **Static**
+			- Розташовуемо на початку обʼєкта після статичних властивостей.
+		- **Public**
+			- До цієї групи входить open, public та internal методи.
+			- Розташовуются після методів життевого циклу
+		- **Private**
+			- До цієї групи входить private методи.
+			- Розтарошуются після public методів
+			- Поділяются на 3 основні підгрупи: методи конфінурації, API Methods, Hanlders Methods. 
+			- Можна додавати додаткові кастомні підргупи за необхідністю.
+			- Порядок розташування зазначений у попредньому пункті.
+		
 6. **Розширення (Extensions):**
 	- Якщо файл містить кілька розширень для класу/структури, вони розташовуються в кінці файлу. Окрім випадків коли основна або єдина задача це виконувати вимоги протоколу, у цьому випадку можна вказувати протокол після назви об'єкта. А методи протоколу які реалізуе цей об'єкт повинні бути відокремлені за допомогою `// MARK:`
 	- Спочатку слід розташовувати розширення із стандартної бібліотеки apple: UITableViewDelegate, UITextFieldDelegate, e.t.c.
@@ -405,10 +345,31 @@ func square(of number: Int) -> Int {
 	- Останніми розширення базових класів.
 
 7. **Службові типи:**
-	- Невеликі пов'язані допоміжні типи можуть бути визначені в одному файлі. Це може бути корисно при використанні fileprivate для обмеження певної функціональності типу та/або його допоміжними типами тільки в цьому файлі.
-	- Місце декларації службових типів слід вибирати самостійно, з урахуванням зручності їх використання та читабельності коду. 
+	- Невеликі пов'язані допоміжні типи можуть бути визначені в одному файлі.
+	- Місце декларації службових типів слід вибирати самостійно, з урахуванням зручності їх використання та читабельності коду.
 
-### Приклад:
+## 2. Використання `// MARK:`
+
+**// MARK:** — це потужний інструмент для структурування та навігації по коду, особливо у великих класах, структурах чи файлах. Його правильне використання допомагає покращити читабельність, полегшує розуміння коду та прискорює роботу з ним.
+
+Використовуйте **// MARK:** для групування властивостей, методів та інших елементів.
+
+- Методи групи Private виділяються подвійною рискою
+
+	> // MARK: - Private -
+
+- Усе інше одніею
+
+	> // MARK: - Properties
+
+### Навіщо використовувати?
+
+1. **Покращення читабельності**: Розділяє логічні блоки коду (наприклад, властивості, методи, ініціалізатори).
+2. **Прискорення навігації**: У Xcode розділи, позначені **// MARK:**, відображаються в меню навігації (мапа файлу).
+3. **Зменшення когнітивного навантаження**: Структурує файл, полегшуючи роботу з ним.
+
+
+## 3. Приклад:
 
 ```swift
 import UIKit
@@ -426,11 +387,24 @@ struct ExampleViewControllerDataModel {
 
 /// View controller that shows an example of code style usage
 final class ExampleViewController: UIViewController {
+    // MARK: - Static
     static let subtitleLabelFontSize: CGFloat = 24.0
-
-    @IBOutlet private weak var titleLabel: UILabel!
+    
+    static func doSomethingStatic() {
+        // ...
+    }
+    
+    private static func makeSeparatorView() -> UIView {
+        // ...
+    }
     
     // MARK: - Properties
+    open let exampleOfOpenProperty: CGFloat
+    
+    var exampleOfInternalProperty: String
+    
+    @IBOutlet private weak var titleLabel: UILabel!
+    
     private let subtitleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -480,8 +454,32 @@ final class ExampleViewController: UIViewController {
         super.viewDidAppear(animated)
         runApperanceAnimation()
     }
+    
+    // MARK: - Public
+    open func doSemthingOpen() {
+        // ...
+    }
+    
+    open func doSemthingPublic() {
+        // ...
+    }
+    
+    func uppercasedInput() -> String? {
+        textField.uppercasedInput()
+    }
+    
+    func configure(wit model: ExampleViewControllerDataModel) {
+        titleLabel.text = model.title
+        
+        subtitleLabel.textColor = model.isWarning
+        ? Constants.subtitleLabelWarningTextColor
+        : Constants.subtitleLabelRegularTextColor
+        
+        mainButton.setTitle(model.isWarning ? "Back" : "Continue", for: .normal)
+        descriptionView.setTitle(model.description)
+    }
 
-    // MARK: - Private
+    // MARK: - Private -
     private func setup() {
         view.backgroundColor = .white
         
@@ -534,33 +532,29 @@ final class ExampleViewController: UIViewController {
         // ...
     }
     
-    @objc private func onMainButtonTap() {
+    // MARK: - API Calls
+    private func requestData() -> Responce {
         // ...
     }
     
-    // MARK: - Public
-    func uppercasedInput() -> String? {
-        textField.uppercasedInput()
+    // MARK: - Handlers
+    private func processResponce(_ responce: Responce) {
+        // ...
     }
     
-    func configure(wit model: ExampleViewControllerDataModel) {
-        titleLabel.text = model.title
-        
-        subtitleLabel.textColor = model.isWarning
-        ? Constants.subtitleLabelWarningTextColor
-        : Constants.subtitleLabelRegularTextColor
-        
-        mainButton.setTitle(model.isWarning ? "Back" : "Continue", for: .normal)
-        descriptionView.setTitle(model.description)
+    @objc private func onMainButtonTap() {
+        // ...
     }
 }
 
-// MARK: - Constants
-private enum Constants {
-    static let titleFont: UIFont = .boldSystemFont(ofSize: 24)
-    static let subtitleLabelFontSize: CFloat = 24.0
-    static let subtitleLabelWarningTextColor: UIColor = .red
-    static let subtitleLabelRegularTextColor: UIColor = .black
+// MARK: - ExampleViewController + Constants
+private extension ExampleViewController {
+    private enum Constants {
+        static let titleFont: UIFont = .boldSystemFont(ofSize: 24)
+        static let subtitleLabelFontSize: CFloat = 24.0
+        static let subtitleLabelWarningTextColor: UIColor = .red
+        static let subtitleLabelRegularTextColor: UIColor = .black
+    }
 }
 
 // MARK: - UITextFieldDelegate
@@ -586,8 +580,6 @@ private extension UITextField {
 
 // MARK: - DescriptionView
 private class DescriptionView: UIView {
-    // ...
-    
     func setTitle(_ text: String) {
         // ...
     }
@@ -661,66 +653,6 @@ view.configureView(
 - Якщо кількість параметрів у методі перевищує 3-4.
 - Якщо параметри довгі за змістом або мають схожі назви, що може ускладнити розуміння.
 
-
-    
-# Використання `// MARK:`
-
-**// MARK:** — це потужний інструмент для структурування та навігації по коду, особливо у великих класах, структурах чи файлах. Його правильне використання допомагає покращити читабельність, полегшує розуміння коду та прискорює роботу з ним.
-
-Використовуйте **// MARK:** для групування властивостей, методів та інших елементів.
-
-## Навіщо використовувати?
-
-1. **Покращення читабельності**: Розділяє логічні блоки коду (наприклад, властивості, методи, ініціалізатори).
-2. **Прискорення навігації**: У Xcode розділи, позначені **// MARK:**, відображаються в меню навігації (мапа файлу).
-3. **Зменшення когнітивного навантаження**: Структурує файл, полегшуючи роботу з ним.
-
-
-## Приклади використання
- **1. Структура великого класу**
-
-``` swift
-final class ShoppingCartViewController: UIViewController {
-    // MARK: - Properties
-    private var items: [CartItem] = []
-
-    // MARK: - Init
-    init(items: [CartItem]) {
-        self.items = items
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupUI()
-    }
-    
-    // MARK: - Public
-    func items() -> [CarItem] {
-    	return items
-    }
-
-    // MARK: - Private
-    private func setupUI() {
-        // Do something...
-    }
-
-    private func calculateTotal() -> Double {
-        return items.reduce(0) { $0 + $1.price }
-    }
-}
-```
-
-## Висновок
-* Використовуйте // MARK: для логічного структурування коду.
-* Стандартизуйте підхід у команді.
-* Дотримуйтесь простоти та читабельності, уникайте надмірної деталізації.
-
 # Використання дужок
 
 У загальному випадку символ "{" не переноситься на новий рядок. Приклади:
@@ -748,6 +680,17 @@ final class ShoppingCartViewController: UIViewController {
         completionHandler()
         return
     }
+    
+    guard
+        let payload = userInfo[Constants.payloadKey] as? [String: Any],
+        let action = payload[Constants.actionKey] as? [String: Any],
+        let rawType = action[Constants.typeKey] as? String,
+        let type = PushNotificationType(rawValue: rawType),
+        type == .pushAccessibility
+    else {
+        completionHandler()
+        return
+    }
     ```
 
 * **Цикли for, while:**
@@ -770,13 +713,13 @@ final class ShoppingCartViewController: UIViewController {
 
     ```swift
     final class ViewPresenter {
-        // MARK: - Private
-        private var isShown = false
-
         // MARK: - Public
         func show() {
             isShown = true
         }
+    
+        // MARK: - Private -
+        private var isShown = false
     }
     ```
 
@@ -931,20 +874,6 @@ if isEligible {
 # Public, Open, Internal
 У межах основного таргета модифікатори **open, public, internal** не використовуються (виняток становлять окремі бібліотеки).
 
-# Fileprivate
-Модифікатор **fileprivate** застосовується тільки тоді, коли змінна або метод мають використовуватись одним із розширень об'єкта в межах файлу або пов'язаним fileprivate-об'єктом. Важливо чітко розрізняти області видимості **private** та **fileprivate.**
-
-### Приклад:
-```swift
-final class MainView: UIView {
-    private let clildView: ChildView
-}
-
-fileprivate final class ChildView: UIView {
-    // Some realization
-}
-```
-
 # Налаштування властивостей View
 
 При використанні **Storyboard** або **XIB**, налаштування властивостей `UIView` (та її підкласів) таких як `backgroundColor`, `cornerRadius`, `shadow`, **виконується виключно з коду**. Це забезпечує більшу контрольованість, прозорість і зручність у підтримці коду.
@@ -965,6 +894,84 @@ final class Service {
 }
 ```
 
+# Опціонали
+Замість явного використання до прикладу **guard let self = self else...**, слід використовувати просто **guard let self else...**.
+
+# Файлова струтура
+Для підтримки чистої та зрозумілої структури проєкту всі UI-модулі слід розташовувати в одній батьківській папці. Це полегшує навігацію та дозволяє підтримувати єдину ієрархію.
+
+Основні принципи:
+
+ **Єдина батьківська папка для UI-модулів:**
+ 
+- Усі модулі, пов’язані з UI, слід розміщувати в одній кореневій папці, наприклад, Views.
+
+**Ієрархія для дочірніх в'ю:**
+
+- Якщо основний модуль має дочірні елементи (наприклад, вкладені в'ю чи компоненти), створюйте відповідну ієрархію папок:
+
+Основна в'ю (IndicatorView) розташовується у своїй папці.
+Дочірні в'ю (DotsIndicatorView, CircleIndicatorView) розміщуються у вкладеній папці в межах основної.
+Назви папок: Назви папок повинні відповідати назвам модулів. 
+
+Наприклад:
+
+```swift
+Views/
+├── IndicatorView/
+│   ├── IndicatorView.xib
+│   ├── IndicatorView.swift
+│   ├── IndicatorViewModel.xib
+│   ├── IndicatorViewViewModel.xib
+│   ├── ChildViews/
+│       ├── DotsIndicatorView.swift
+│       ├── CircleIndicatorView.swift
+```
+
+# Робота з ресурсами
+
+Ефективна організація та використання ресурсів у проєкті є важливою складовою підтримки коду. Нижче наведено основні правила роботи з ресурсами.
+
+### 1. Іменування ресурсів
+- Використовуйте **snake_case** для назв файлів ресурсів.
+
+> icon_profile 
+
+> background_main
+
+> button_add
+
+### 2. Використання зображень
+- За можливості, використовуйте векторні зображення.
+- Для векторних зображень обов’язково встановлюйте галочку `Preserve Vector Data` в Xcode.
+- Використовуйте `Scales: Single scale`.
+
+### 3. Організація ресурсів
+- Ресурси повинні бути організовані у відповідних групах та папках у проєкті:
+- Уникайте дублікатів ресурсів: однакові зображення або файли не повинні зберігатися під різними іменами.
+
+### 4. Вибір формату
+- Завжди віддавайте перевагу векторним зображенням (SVG), якщо це можливо.
+- Растрові зображення (PNG, JPEG) використовуйте лише тоді, коли немає можливості створити векторний файл.
+
+### 5. Приклад налаштування ресурсу
+#### Векторне зображення:
+- Формат: SVG.
+- Налаштування:
+- Прапорець `Preserve Vector Data`: увімкнено.
+- `Scales: Single scale`.
+
+#### Растрове зображення:
+- Формат: PNG (або JPEG для фото).
+- Налаштування:
+- `Scales: Single scale`.
+
+### 6. Висновок
+Дотримання цих правил забезпечує:
+- Узгодженість використання ресурсів.
+- Полегшену підтримку проєкту.
+- Зменшення розміру програми за рахунок оптимізації роботи з ресурсами.
+
 # Make it better
 
 Хорошою практикою э залишати код трохи кращим, ніж він був до вас. Це означає, що, працюючи над функціоналом або виправляючи помилки, варто звертати увагу на загальний стан коду і вносити невеликі покращення там, де це можливо навіть якщо цей код написаний не вами.
@@ -984,6 +991,8 @@ final class Service {
 
 Пам’ятайте: навіть невеликі зміни, такі як виправлення помилки у назві змінної або оновлення застарілого коментаря, роблять ваш код більш якісним і сприяють загальному успіху проєкту.
 
+
+
 # Робота з Git
 
 Дотримання єдиного підходу до роботи з Git забезпечує зручність у розробці, спрощує рев’ю коду та підтримку проєкту. Нижче наведено основні правила роботи з Git у нашій команді.
@@ -991,11 +1000,15 @@ final class Service {
 ### 1. Іменування гілок
 - Використовуйте **kebab-case** у назвах гілок.
 - Якщо гілка стосується конкретної задачі, починайте її назву з номера задачі:
+
 > feature/IOS-6021-fix-login-bug
+
 > feature/IOS-6035-add-profile-screen
 
 - Для загальних змін (які не стосуються конкретної задачі) використовуйте описову назву:
+
 > feature/update-readme
+
 > feature/refactor-network-layer
 
 ### 2. Коміти
@@ -1010,12 +1023,7 @@ final class Service {
 - При злитті гілок залишайте коміт типу `Merge branch 'feature/branch_name' into 'develop'`.
 - Це допомагає зберегти прозорість змін і полегшує аналіз історії.
 
-### 3. Історія комітів
-- Історія повинна бути якомога лінійнішою.
-- Уникайте зайвих розгалужень та хаотичного об’єднання гілок.
-- Для складних змін залишайте чіткі коментарі, щоб пояснити, чому були внесені ті чи інші зміни.
-
-### 4. Правила роботи з Pull Request
+### 3. Правила роботи з Pull Request
 - Невеликі зміни можна об'єднувати в один PR. Для інших - один PR — одна задача.
 - Опис PR має бути чітким та інформативним.
 - Вкажіть, яку проблему вирішує PR, що змінюється та як це впливає на функціональність.
@@ -1023,46 +1031,4 @@ final class Service {
 - Проводьте рев’ю коду.
 - Усі зміни повинні бути перевірені хоча б одним іншим членом команди.
 - Звертайте увагу на відповідність коду до стандартів проєкту, його читабельність та оптимальність.
-
-# Робота з ресурсами
-
-Ефективна організація та використання ресурсів у проєкті є важливою складовою підтримки коду. Нижче наведено основні правила роботи з ресурсами.
-
-### 1. Іменування ресурсів
-- Використовуйте **snake_case** для назв файлів ресурсів.
-> icon_profile background_main button_add
-
-### 2. Використання зображень
-- За можливості, використовуйте векторні зображення.
-- Для векторних зображень обов’язково встановлюйте галочку `Preserve Vector Data` в Xcode.
-- Використовуйте `Scales: Single scale`.
-- Всі однотонні зображення повинні бути у чорному кольорі `#000000`
-
-### 3. Організація ресурсів
-- Ресурси повинні бути організовані у відповідних групах та папках у проєкті:
-- Уникайте дублікатів ресурсів: однакові зображення або файли не повинні зберігатися під різними іменами.
-
-### 4. Вибір формату
-- Завжди віддавайте перевагу векторним зображенням (SVG), якщо це можливо.
-- Растрові зображення (PNG, JPEG) використовуйте лише тоді, коли немає можливості створити векторний файл.
-
-### 5. Приклад налаштування ресурсу
-#### Векторне зображення:
-- Формат: SVG.
-- Налаштування:
-- `Render As: Template Image` (для однотонних).
-- `Render As: Original Image` (для кольорових).
-- Прапорець `Preserve Vector Data`: увімкнено.
-- `Scales: Single scale`.
-
-#### Растрове зображення:
-- Формат: PNG (або JPEG для фото).
-- Налаштування:
-- `Render As: Original Image`.
-- `Scales: Single scale`.
-
-### 6. Висновок
-Дотримання цих правил забезпечує:
-- Узгодженість використання ресурсів.
-- Полегшену підтримку проєкту.
-- Зменшення розміру програми за рахунок оптимізації роботи з ресурсами.
+- Ставимо прапорець **Squash commits**
