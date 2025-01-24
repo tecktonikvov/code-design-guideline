@@ -359,15 +359,21 @@ func square(of number: Int) -> Int {
 	> // MARK: - Private -
 
 - Усе інше одніею
-
+	> // MARK: - Static
+ 
 	> // MARK: - Properties
+ 
+	> // MARK: - API
+ 
+	> e.t.c
+
+- У розділі **API** слід розміщати мережеві запити та методи обробки їх респонсів
 
 ### Навіщо використовувати?
 
 1. **Покращення читабельності**: Розділяє логічні блоки коду (наприклад, властивості, методи, ініціалізатори).
 2. **Прискорення навігації**: У Xcode розділи, позначені **// MARK:**, відображаються в меню навігації (мапа файлу).
 3. **Зменшення когнітивного навантаження**: Структурує файл, полегшуючи роботу з ним.
-
 
 ## 3. Приклад:
 
@@ -532,16 +538,16 @@ final class ExampleViewController: UIViewController {
         // ...
     }
     
-    // MARK: - API Calls
+    // MARK: - API
     private func requestData() -> Responce {
         // ...
     }
-    
-    // MARK: - Handlers
+	
     private func processResponce(_ responce: Responce) {
         // ...
     }
     
+    // MARK: - Handlers
     @objc private func onMainButtonTap() {
         // ...
     }
