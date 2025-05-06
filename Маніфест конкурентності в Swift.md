@@ -3,7 +3,8 @@
 Автор: [Chris Lattner](https://github.com/lattner)
 
 [Китайський переклад](https://gist.github.com/yxztj/7744e97eaf8031d673338027d89eea76) від [Jason Yu](https://github.com/yxztj)
-[Оригінал Англійська]([https://gist.github.com/yxztj/7744e97eaf8031d673338027d89eea76)(https://gist.github.com/lattner/31ed37682ef1576b16bca1432ea9f782))
+
+[Оригінал Англійська](https://gist.github.com/yxztj/7744e97eaf8031d673338027d89eea76)
 
 ## Зміст
 
